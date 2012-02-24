@@ -1,4 +1,4 @@
-= FunSFTP (Version 0.0.2)
+= FunSFTP (Version 0.0.3)
 
 Ruby Gem that provides a nice and easy to work with wrapper for the Net::SFTP library.
 
@@ -51,7 +51,7 @@ When investigating items in the remote host, these can be handy:
   ["test1", "test2", "some_directory_here"]
   
   Command: conn.glob("directory_name", "**/*.rb")
-  #=> Pattern matches the second argument for the directory_name given
+  #=> Pattern matches the second argument in the directory_name given
   #=> So, you can get things like...
   some_directory_here/hello_world.rb
   some_directory_here/sftp_is_fun.rb
@@ -65,7 +65,9 @@ So far, you can make/remove directories, remove/rename files
   Command: conn.mkdir!("some_directory/a_new_directory_name_here")
   #=> makes a_new_directory_name_here under some_directory which exists
 
-Removing a directory is the same as above except you would now specify: conn.rmdir!
+Removing a directory is the same as above except you would now specify: 
+  
+  conn.rmdir!
 
 Files can be renamed and removed off the remote:
   

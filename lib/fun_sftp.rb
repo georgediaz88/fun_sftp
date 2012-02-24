@@ -1,7 +1,13 @@
 require 'fun_sftp/version'
+
+#safe require to avoid any 'constant already init msg'
+orig_verbose = $VERBOSE
+$VERBOSE = nil
 require 'net/sftp'
+$VERBOSE = orig_verbose
 
 module FunSftp
+
   class SFTPClient
     attr_accessor :server, :user, :password, :client
 

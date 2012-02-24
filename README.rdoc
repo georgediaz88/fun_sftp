@@ -1,0 +1,101 @@
+= FunSFTP (Version 0.0.1)
+
+Ruby Gem that provides a nice and easy to work with wrapper for the Net::SFTP library.
+
+Modeled from:
+
+http://net-ssh.github.com/sftp/v2/api/index.html
+
+
+== Install
+
+  gem install fun_sftp
+  
+  In Rails: gem 'fun_sftp'
+
+
+== Usage
+
+Let's say you need to send a file to a remote host. Well, you can upload it to the remote host using these steps:
+
+  #First setup the connection:
+  include FunSftp
+  
+  conn = SFTPClient.new(server, username, password)
+  
+  #Now, you can upload your file:
+  
+  conn.upload!("my_file_name.txt", "some_directory/give_a_name.txt")
+
+That's it! Check the remote host and see that your file posted.
+
+You can also download a file locally by:
+
+  conn.download!("some_directory/file_to_download_name.txt", "give_the_local_name.txt")
+
+Need to read a file on the remote host? No biggie...
+
+  conn.read("path/to/file")
+  # => Here is content in your requested file.
+
+When investigating items to the remote host, these can be handy:
+
+  Command: conn.print_directory_items("directory_name")
+  #=> outputs directories
+  test1
+  test2
+  some_directory_here
+  
+  Command: conn.entries("directory_name")
+  #=> outputs a nice array of entries in the specified directory
+  ["test1", "test2", "some_directory_here"]
+  
+  Command: conn.glob("directory_name", "**/*.rb")
+  #=> Pattern matches the second argument for the directory_name given
+  #=> So, you can get things like...
+  some_directory_here/hello_world.rb
+  some_directory_here/sftp_is_fun.rb
+
+== FileUtils
+
+FileUtilities are handy for doing some dirty work on the remote host.
+
+So far, you can make/remove directories, remove/rename files
+
+  Command: conn.mkdir!("some_directory/a_new_directory_name_here")
+  #=> makes a_new_directory_name_here under some_directory which exists
+
+Removing a directory is the same as above except you would now specify: conn.rmdir!
+
+Files can be renamed and removed off the remote:
+  
+  Command: conn.rm("path/to/file.txt")
+  #=> would remove file.txt
+  
+  Command: conn.rename("old_file_name.txt", "new_file_name.txt")
+  #=> old_file_name.txt is now named new_file_name.txt on remote host.
+
+Hopefully, this is basic enough to work with and transfer files!!
+
+== License
+
+Copyright (c) 2012 George Diaz
+ 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+ 
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+ 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

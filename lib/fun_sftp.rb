@@ -15,7 +15,7 @@ module FunSftp
     end
   
     def upload!(source, target) #send to remote
-      @client.upload!(source, target) #target example: 'lrs/some_name.txt'
+      @client.upload!(source, target) #target example: 'some_directory/some_name.txt'
     end
   
     def download!(target, source) #fetch locally from remote
@@ -29,7 +29,7 @@ module FunSftp
       end
     end
 
-    def glob(path, pattern) # ex: ('lrs', '**/*.rb')
+    def glob(path, pattern) # ex: ('some_directory', '**/*.rb')
       @client.dir.glob(path, pattern).collect(&:name)
     end
   

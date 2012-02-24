@@ -35,18 +35,18 @@ You can also download a file locally by:
 
 Need to read a file on the remote host? No biggie...
 
-  <b>conn.read("path/to/file")</b>
+  conn.read("path/to/file")
   # => Here is content in your requested file.
 
 When investigating items in the remote host, these can be handy:
 
-  Command: <b>conn.print_directory_items("directory_name")</b>
+  Command: conn.print_directory_items("directory_name")
   #=> outputs directories
   test1
   test2
   some_directory_here
   
-  Command: <b>conn.entries("directory_name")</b>
+  Command: conn.entries("directory_name")
   #=> outputs a nice array of entries in the specified directory
   ["test1", "test2", "some_directory_here"]
   

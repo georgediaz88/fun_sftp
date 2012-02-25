@@ -1,4 +1,4 @@
-= FunSFTP (Version 0.0.6)
+= FunSFTP (Version 0.0.7)
 
 A Ruby Gem that provides a nice and easy to use wrapper for the Net::SFTP library.
 

@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = FunSftp::VERSION
   s.authors     = ["George Diaz"]
   s.email       = ["georgediaz88@yahoo.com"]
-  s.homepage    = ""
+  s.homepage    = "https://rubygems.org/gems/fun_sftp"
   s.summary     = %q{FunSFTP for secure file transfers}
-  s.description = %q{Wrapper for Rubys Net::SFTP library which makes SFTP easy! See Documentation at https://github.com/georgediaz88/fun_sftp}
+  s.description = %q{Wrapper for Ruby's Net::SFTP library which makes SFTP easy! See Documentation at https://github.com/georgediaz88/fun_sftp}
 
   s.rubyforge_project = "fun_sftp"
 

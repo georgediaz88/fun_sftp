@@ -9,52 +9,58 @@ http://net-ssh.github.com/sftp/v2/api/index.html
 
 == Install
 
-  gem install fun_sftp
+  Use Ruby versions >= 1.8.7
+
+  1) gem install fun_sftp
+
+  or in a Rails 3+ project:
+
+  2) gem 'fun_sftp'
   
-  In Rails: gem 'fun_sftp'
+  and bundle away!
 
 
 == Usage
 
 Let's say you need to send a file to a remote host. Well, you can upload it to the remote host using these steps:
 
-  #First setup the connection:
-  include FunSftp
+  1) First setup the connection:
   
+  include FunSftp
+
   conn = SFTPClient.new(server, username, password)
   
-  #Now, you can upload your file:
+  2) Now, you can upload your file:
   
-  conn.upload!("my_file_name.txt", "some_directory/give_a_name.txt")
+  conn.upload!("my_file_name.txt", "some_remote_directory/give_a_name.txt")
 
-That's it! Check the remote host and see that your file posted.
+That's it! Check the remote host to see that your file posted.
 
-You can also download a file locally by:
+You can also download a remote file to your local machine:
 
-  conn.download!("some_directory/file_to_download_name.txt", "give_the_local_name.txt")
+  conn.download!("some_remote_directory/file_to_download_name.txt", "give_desired_local_name.txt")
 
-Need to read a file on the remote host? No biggie...
+Need to read a file on the remote host? Ah, it's no biggie...
 
-  conn.read("path/to/file")
-  # => Here is content in your requested file.
+  conn.read("path/to/file_name.txt")
+  #=> Hello World!
 
-When investigating items in the remote host, these can be handy:
+When investigating items on the remote host, these commands can be handy:
 
-  Command: conn.print_directory_items("directory_name")
-  #=> outputs directories
-  test1
-  test2
-  some_directory_here
+  1) conn.print_directory_items("directory_name")
+  # outputs directories one line at a time
+  # => test1
+       test2
+       some_directory_here
   
-  Command: conn.entries("directory_name")
-  #=> outputs a nice array of entries in the specified directory
-  ["test1", "test2", "some_directory_here"]
+  2) conn.entries("directory_name")
+  # outputs a nice array of entries in the specified directory
+  # => ["test1", "test2", "some_directory_here"]
   
-  Command: conn.glob("directory_name", "**/*.rb")
-  #=> Pattern matches the second argument in the directory_name given
-  #=> So, you can get things like...
-  some_directory_here/hello_world.rb
-  some_directory_here/sftp_is_fun.rb
+  3) conn.glob("directory_name", "**/*.rb")
+  # Traverses the directory specified using the second argument/matcher
+  # So, you can get things like...
+  # => ["some_directory_here/hello_world.rb", "sftp_is_fun.rb"]
 
 == FileUtils
 
@@ -62,22 +68,23 @@ FileUtilities are handy for doing some dirty work on the remote host.
 
 So far, you can make/remove directories, remove/rename files
 
-  Command: conn.mkdir!("some_directory/a_new_directory_name_here")
-  #=> makes a_new_directory_name_here under some_directory which exists
+  1) conn.mkdir!("some_remote_directory/a_new_directory_name_here")
+     # makes a_new_directory_name_here under some_remote_directory if it exists
 
-Removing a directory is the same as above except you would now specify: 
+Removing a directory is the same as above except you would swap mkdir! for rmdir!: 
   
-  conn.rmdir!
+  2) conn.rmdir!("...")
 
-Files can be renamed and removed off the remote:
+Files can be removed and renamed off the remote host:
   
-  Command: conn.rm("path/to/file.txt")
-  #=> would remove file.txt
+  1) conn.rm("path/to/file.txt")
+     # would remove file.txt
   
-  Command: conn.rename("old_file_name.txt", "new_file_name.txt")
-  #=> old_file_name.txt is now named new_file_name.txt on remote host.
+  2) conn.rename("old_file_name.txt", "new_file_name.txt")
+     # old_file_name.txt is now named new_file_name.txt on the remote host.
 
 Hopefully, this is basic enough to work with and transfer files!!
+Look for new helpful method calls in future releases.
 
 == License
 

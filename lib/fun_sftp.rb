@@ -56,7 +56,7 @@ module FunSftp
     end
 
     def items_in(root_dir) #array of *all* directories & files inside provided root directory
-      @client.glob(root_dir, '**/*').sort
+      glob(root_dir, '**/*').sort
     end
   
     #### Some Handy File Util Methods

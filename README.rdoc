@@ -1,6 +1,6 @@
 = FunSFTP (Version 0.0.5)
 
-Ruby Gem that provides a nice and easy to work with wrapper for the Net::SFTP library.
+A Ruby Gem that provides a nice and easy to use wrapper for the Net::SFTP library.
 
 Modeled from:
 
@@ -13,11 +13,11 @@ http://net-ssh.github.com/sftp/v2/api/index.html
 
   1) gem install fun_sftp
 
-  or in a Rails 3+ project:
+     or in a Rails 3+ project:
 
   2) gem 'fun_sftp'
   
-  and bundle away!
+     and bundle away!
 
 
 == Usage
@@ -26,13 +26,12 @@ Let's say you need to send a file to a remote host. Well, you can upload it to t
 
   1) First setup the connection:
   
-  include FunSftp
-
-  conn = SFTPClient.new(server, username, password)
+     include FunSftp
+     conn = SFTPClient.new(server, username, password)
   
   2) Now, you can upload your file:
   
-  conn.upload!("my_file_name.txt", "some_remote_directory/give_a_name.txt")
+     conn.upload!("my_file_name.txt", "some_remote_directory/give_a_name.txt")
 
 That's it! Check the remote host to see that your file posted.
 
@@ -48,19 +47,19 @@ Need to read a file on the remote host? Ah, it's no biggie...
 When investigating items on the remote host, these commands can be handy:
 
   1) conn.print_directory_items("directory_name")
-  # outputs directories one line at a time
-  # => test1
-       test2
-       some_directory_here
+     # outputs directories one line at a time
+     # => test1
+          test2
+          some_directory_here
   
   2) conn.entries("directory_name")
-  # outputs a nice array of entries in the specified directory
-  # => ["test1", "test2", "some_directory_here"]
+     # outputs a nice array of entries in the specified directory
+     # => ["test1", "test2", "some_directory_here"]
   
   3) conn.glob("directory_name", "**/*.rb")
-  # Traverses the directory specified using the second argument/matcher
-  # So, you can get things like...
-  # => ["some_directory_here/hello_world.rb", "sftp_is_fun.rb"]
+     # Traverses the directory specified using the second argument/matcher
+     # So, you can get things like...
+     # => ["some_directory_here/hello_world.rb", "sftp_is_fun.rb"]
 
 == FileUtils
 

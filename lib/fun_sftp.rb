@@ -28,7 +28,7 @@ module FunSftp
       @client.download!(target, source)
     end
   
-    def read(path)
+    def read(path) #read a file
       file = @client.file.open(path)
       while !file.eof?
         puts file.gets

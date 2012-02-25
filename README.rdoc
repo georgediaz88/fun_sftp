@@ -1,4 +1,4 @@
-= FunSFTP (Version 0.0.5)
+= FunSFTP (Version 0.0.6)
 
 A Ruby Gem that provides a nice and easy to use wrapper for the Net::SFTP library.
 
@@ -46,17 +46,24 @@ Need to read a file on the remote host? Ah, it's no biggie...
 
 When investigating items on the remote host, these commands can be handy:
 
-  1) conn.print_directory_items("directory_name")
+  1) conn.has_directory?("directory_name")
+     # returns true or false if the directory exists
+
+  2) conn.items_in("directory_name")
+    # returns an array of every directory and file within the provided directory
+    # => ["test1", "test1/h1.rb", "test2", "test2/h2.txt"]
+
+  3) conn.print_directory_items("directory_name")
      # outputs directories one line at a time
      # => test1
           test2
           some_directory_here
-  
-  2) conn.entries("directory_name")
+
+  4) conn.entries("directory_name")
      # outputs a nice array of entries in the specified directory
      # => ["test1", "test2", "some_directory_here"]
-  
-  3) conn.glob("directory_name", "**/*.rb")
+
+  5) conn.glob("directory_name", "**/*.rb")
      # Traverses the directory specified using the second argument/matcher
      # So, you can get things like...
      # => ["some_directory_here/hello_world.rb", "sftp_is_fun.rb"]
@@ -82,7 +89,7 @@ Files can be removed and renamed off the remote host:
   2) conn.rename("old_file_name.txt", "new_file_name.txt")
      # old_file_name.txt is now named new_file_name.txt on the remote host.
 
-Hopefully, this is basic enough to work with and transfer files!!
+Hopefully, this is easy enough to work with and transfer files!!
 Look for new helpful method calls in future releases.
 
 == License

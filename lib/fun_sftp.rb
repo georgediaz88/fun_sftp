@@ -38,13 +38,25 @@ module FunSftp
     def glob(path, pattern) # ex: ('some_directory', '**/*.rb')
       @client.dir.glob(path, pattern).collect(&:name)
     end
-  
+
     def entries(dir) #array of directory items
-      @client.dir.entries(dir).collect(&:name)
+      @client.dir.entries(dir).collect(&:name).reject!{|a| a.match(/^\.+$/)}
+    end
+
+    def has_directory?(dir) #returns true if directory exists
+      begin
+        true if entries(dir)
+      rescue Exception => e
+        false
+      end
     end
 
     def print_directory_items(dir) #printout of directory items
       @client.dir.foreach(dir) { |file| print "#{file.name}\n" }
+    end
+
+    def items_in(root_dir) #array of *all* directories & files inside provided root directory
+      @client.glob(root_dir, '**/*').sort
     end
   
     #### Some Handy File Util Methods

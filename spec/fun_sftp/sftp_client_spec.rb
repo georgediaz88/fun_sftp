@@ -21,14 +21,14 @@ module FunSftp
         dir1 = double("sftp_dir", :name => ".")
         dir2 = double("sftp_dir", :name => "import_docs")
         dir3 = double("sftp_dir", :name => "training_docs")
-        sftp_mock.stub_chain(:dir, :entries).with('Desktop').and_return([dir1, dir2, dir3])
+        sftp_mock.stub_chain(:dir, :entries).with(anything()).and_return([dir1, dir2, dir3])
         @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
         expect(@sftp_cli.entries('Desktop')).to eq([dir2.name, dir3.name])
       end
 
       it 'should read both lines from test file' do
         file = File.expand_path('../../support/test1.txt', __FILE__)
-        sftp_mock.stub_chain(:file, :open).with(file).and_return(File.open(file))
+        sftp_mock.stub_chain(:file, :open).with(anything()).and_return(File.open(file))
         @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
         expect(@sftp_cli).to receive(:puts).twice
         @sftp_cli.read(file)

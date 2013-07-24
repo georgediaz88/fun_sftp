@@ -3,15 +3,14 @@ require 'fun_sftp/configuration'
 require 'fun_sftp/upload_callbacks'
 require 'fun_sftp/download_callbacks'
 
-#safe require to avoid any 'constant already init msg'
+# safe require
+# avoids any 'constant already init msg'
 orig_verbose = $VERBOSE
 $VERBOSE = nil
 require 'net/sftp'
 $VERBOSE = orig_verbose
 
-# Ref: http://net-ssh.rubyforge.org/sftp/v2/api/
-# TD: Set a default source point??
-# TD: Setup any aliases
+# Reference: http://net-ssh.rubyforge.org/sftp/v2/api/
 # TD: Write More Tests!!
 module FunSftp
   class SFTPClient
@@ -23,11 +22,8 @@ module FunSftp
       @client = setup_login
     end
 
-    #DRY? #new method to cleanup?
     def source=(path)
-      tilda_ith = path.rindex(/~/)
-      new_path = path[tilda_ith..-1].gsub(/~/, '.')
-      @source = new_path
+      @source = clean_path(path)
     end
 
     def setup_login
@@ -39,7 +35,7 @@ module FunSftp
       opts = {:progress => UploadCallbacks.new, :recursive => true}
       converted_target = join_to_pwd(target)
       opts.delete(:progress) unless loggable?
-      opts.delete(:recursive) unless has_directory?(target)
+      opts.delete(:recursive) unless has_directory?(converted_target)
       @client.upload!(source, converted_target, opts)
     end
 
@@ -47,7 +43,7 @@ module FunSftp
       opts = {:progress => DownloadCallbacks.new, :recursive => true}
       converted_target = join_to_pwd(target)
       opts.delete(:progress) unless loggable?
-      opts.delete(:recursive) unless has_directory?(target)
+      opts.delete(:recursive) unless has_directory?(converted_target)
       @client.download!(converted_target, source, opts)
     end
 
@@ -62,9 +58,9 @@ module FunSftp
       @client.dir.glob(join_to_pwd(path), pattern).collect(&:name)
     end
 
-    def entries(dir) #array of directory entries not caring for '.' files
-      @client.dir.entries(dir).collect(&:name).reject!{|a| a.match(/^\..*$/)}
-      #@client.dir.entries(join_to_pwd(dir)).collect(&:name).reject!{|a| a.match(/^\..*$/)}
+    def entries(dir, show_dot_files = false) #array of directory entries not caring for '.' files
+      entries = @client.dir.entries(dir).collect(&:name)
+      entries.reject!{|a| a.match(/^\..*$/)} unless show_dot_files
     end
 
     def has_directory?(dir) #returns true if directory exists
@@ -76,7 +72,7 @@ module FunSftp
     end
 
     def print_directory_items(dir) #printout of directory's items
-      @client.dir.foreach(join_to_pwd(dir)) { |file| print "#{file.name}\n" }
+      @client.dir.foreach(join_to_pwd(dir)) { |file| puts "#{file.name}" }
     end
 
     def items_in(root_dir) #array of *all* directories & files inside provided root directory
@@ -100,8 +96,7 @@ module FunSftp
     end
 
     def rename(name, new_name) #rename a file
-      previous = join_to_pwd(name)
-      renamed = join_to_pwd(new_name)
+      previous, renamed = join_to_pwd(name), join_to_pwd(new_name)
       @client.rename!(previous, renamed)
     end
 
@@ -111,22 +106,10 @@ module FunSftp
 
     def chdir(path)
       if path =~ /~/
-        tilda_ith = path.rindex(/~/)
-        new_path = path[tilda_ith..-1].gsub(/~/, '.')
-
-        if has_directory? new_path
-          @source = new_path
-          puts "Current Path changed to => #{@source}"
-        else
-          "Sorry Path => #{path} not found"
-        end
+        new_path = clean_path(path)
+        change_directory_check(new_path, path)
       else
-        if has_directory? join_to_pwd(path)
-          @source = join_to_pwd(path)
-          puts "Current Path changed to => #{@source}"
-        else
-          "Sorry Path => #{path} not found"
-        end
+        change_directory_check(join_to_pwd(path), path)
       end
     end
 
@@ -143,6 +126,20 @@ module FunSftp
 
     def join_to_pwd(path)
       File.join(@source, path)
+    end
+
+    def clean_path(path)
+      tilda_ith = path.rindex(/~/)
+      new_path = path[tilda_ith..-1].gsub(/~/, '.')
+    end
+
+    def change_directory_check(converted_path, entered_path)
+      if has_directory? converted_path
+        @source = converted_path
+        "Current Path changed to => #{@source}"
+      else
+        "Sorry Path => #{entered_path} not found"
+      end
     end
 
     def loggable?

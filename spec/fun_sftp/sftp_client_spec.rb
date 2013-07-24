@@ -35,8 +35,11 @@ module FunSftp
       end
 
       it 'should return false for directory not found' do
+        sftp_response = Object.new
+        def sftp_response.code; code = 2 end
+        def sftp_response.message; message = 'no such file' end
         @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
-        @sftp_cli.stub(:entries).and_raise('Net::SFTP::StatusException')
+        @sftp_cli.stub(:entries).and_raise(Net::SFTP::StatusException.new(sftp_response))
         expect(@sftp_cli.has_directory?('bogus_directory')).to eql(false)
       end
     end

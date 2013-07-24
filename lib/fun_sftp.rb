@@ -70,7 +70,7 @@ module FunSftp
     def has_directory?(dir) #returns true if directory exists
       begin
         true if entries(dir)
-      rescue Exception => e
+      rescue Net::SFTP::StatusException => e
         false
       end
     end

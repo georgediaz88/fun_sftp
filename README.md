@@ -27,7 +27,7 @@ conn = SFTPClient.new(server, username, password)
 conn.source = 'projects/awesome_project' #optional
 ```
 
-Changing directories `chdir` and listing all files `ll` can be useful when working in a console. FunSftp now allows you to change your location on the remote host. This saves you from entering long absolute paths all the time
+Changing directories `chdir` and listing all files `ll` can be useful when working in a console. FunSftp now allows you to change your location on the remote host. This saves you from constantly entering long absolute paths.
 
 ```ruby
 conn.chdir("projects")
@@ -133,7 +133,7 @@ conn.rmdir!("directory_name_to_remove")
 Files can be removed and renamed off the remote host:
 
 ```ruby
-conn.rm("file.txt") # would remove file.txt
+conn.rm("file.txt")
 
 conn.rename("old_file_name.txt", "new_file_name.txt")
 # old_file_name.txt is now named new_file_name.txt on the remote host.
@@ -144,7 +144,7 @@ Hopefully, this is easy enough to work with and transfer files!!
 Logging
 -------
 
-By default, logging is turned on and will use the Rails logger if within a Rails projects or defer to STDOUT. Logging is prominent when downloading or uploading. To turn off logging, you can create an initializer and modify the configuration by:
+By default, logging is turned on and will use the Rails logger if within a Rails projects. If not logging will defer to STDOUT. Logging is prominent when downloading or uploading. To turn off logging, you can create an initializer and modify the configuration by:
 
 ```ruby
 FunSftp.configure do |config|
@@ -155,9 +155,9 @@ end
 You can also define your own logger if you'd like.
 
 ```ruby
-  FunSftp.configure do |config|
-    config.logger = MyAwesomeLogger
-  end
+FunSftp.configure do |config|
+  config.logger = MyAwesomeLogger.new
+end
 ```
 
 Contribute

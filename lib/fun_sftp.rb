@@ -34,7 +34,7 @@ module FunSftp
       #target example: 'some_directory/some_name.txt'
       opts = {:progress => UploadCallbacks.new, :recursive => true}
       converted_target = join_to_pwd(target)
-      opts.delete(:progress) unless loggable?
+      opts.delete(:progress) unless FunSftp.loggable?
       opts.delete(:recursive) unless has_directory?(converted_target)
       @client.upload!(source, converted_target, opts)
     end
@@ -42,7 +42,7 @@ module FunSftp
     def download!(target, source) #fetch locally from remote
       opts = {:progress => DownloadCallbacks.new, :recursive => true}
       converted_target = join_to_pwd(target)
-      opts.delete(:progress) unless loggable?
+      opts.delete(:progress) unless FunSftp.loggable?
       opts.delete(:recursive) unless has_directory?(converted_target)
       @client.download!(converted_target, source, opts)
     end
@@ -59,8 +59,9 @@ module FunSftp
     end
 
     def entries(dir, show_dot_files = false) #array of directory entries not caring for '.' files
-      entries = @client.dir.entries(dir).collect(&:name)
-      entries.reject!{|a| a.match(/^\..*$/)} unless show_dot_files
+      entries_arr = @client.dir.entries(dir).collect(&:name)
+      entries_arr.reject!{|a| a.match(/^\..*$/)} unless show_dot_files
+      entries_arr
     end
 
     def has_directory?(dir) #returns true if directory exists
@@ -84,7 +85,7 @@ module FunSftp
     #################################
 
     def mkdir!(path) #make directory
-      @client.mkdir! converted_path(join_to_pwd(path))
+      @client.mkdir!(join_to_pwd(path))
     end
 
     def rm(path) #remove a file
@@ -140,10 +141,6 @@ module FunSftp
       else
         "Sorry Path => #{entered_path} not found"
       end
-    end
-
-    def loggable?
-      (FunSftp.configuration and !FunSftp.configuration.log) ? false : true
     end
 
   end

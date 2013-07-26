@@ -17,9 +17,9 @@ gem 'fun_sftp'
 Usage
 -----
 
-Let's say you need to send a file or directory to a remote host. Well, you can upload it to the remote host using these steps:
+Let's say you need to send a file or directory to a remote host. Well, you can upload it to the remote host via the following:
 
-* First setup the connection and specify a source directory if desired:
+Setup the connection and specify a `source` directory if desired:
 
 ```ruby
 include FunSftp
@@ -27,7 +27,7 @@ conn = SFTPClient.new(server, username, password)
 conn.source = 'projects/awesome_project' #optional
 ```
 
-* Changing directories and listing all files can be useful if working on the command line
+Changing directories `chdir` and listing all files `ll` can be useful when working in a console. FunSftp now allows you to change your location on the remote host. This saves you from entering long absolute paths all the time
 
 ```ruby
 conn.chdir("projects")
@@ -42,7 +42,7 @@ conn.ll
 #    Directory2
 
 conn.pwd
-# Returns the PWD
+# Returns the current working directory
 # => "./projects"
 ```
 
@@ -62,7 +62,7 @@ conn.upload!("my_local_file_name.txt", "some_remote_directory/give_a_name.txt")
 or directory
 
 ```ruby
-conn.upload!("my_awesome_directory", "desired_directory_name")
+conn.upload!("my_awesome_local_directory", "desired_remote_directory_name")
 ```
 
 That's it! Check the remote host to see that your file posted.
@@ -76,7 +76,7 @@ conn.download!("some_remote_directory/file_to_download_name.txt", "desired_local
 or directory
 
 ```ruby
-conn.download!("some_remote_directory", "desired_directory_name")
+conn.download!("some_remote_directory", "desired_local_directory_name")
 ```
 
 Need to read a file on the remote host? Ah, it's no biggie...
@@ -92,19 +92,20 @@ When investigating items on the remote host, these commands can be handy:
 conn.has_directory?("directory_name")
 # returns true or false if the directory exists
 
+conn.entries("directory_name")
+# outputs a nice array of entries in the specified directory
+# Pass true as a second argument if you would like to see '.' files
+# => ["test1", "test2", "some_directory_here"]
+
 conn.items_in("directory_name")
 # Traverses the provided directory returning an array of directories and files
 # => ["test1", "test1/h1.rb", "test2", "test2/h2.txt"]
 
 conn.print_directory_items("directory_name")
-# outputs directories one line at a time
-# => test1
-#    test2
-#    some_directory_here
-
-conn.entries("directory_name")
-# outputs a nice array of entries in the specified directory
-# => ["test1", "test2", "some_directory_here"]
+# a print out of contained directories/files one line at a time
+# => test1.txt
+#    test2.png
+#    fun_directory_1
 
 conn.glob("directory_name", "**/*.rb")
 # Traverses the directory specified using the second argument/matcher
@@ -143,7 +144,7 @@ Hopefully, this is easy enough to work with and transfer files!!
 Logging
 -------
 
-By default, logging is turned on. Logging is prominent when downloading or uploading. To turn off logging, you can create an initializer and modify the configuration.
+By default, logging is turned on and will use the Rails logger if within a Rails projects or defer to STDOUT. Logging is prominent when downloading or uploading. To turn off logging, you can create an initializer and modify the configuration by:
 
 ```ruby
 FunSftp.configure do |config|
@@ -151,7 +152,15 @@ FunSftp.configure do |config|
 end
 ```
 
-Want to Contribute?
+You can also define your own logger if you'd like.
+
+```ruby
+  FunSftp.configure do |config|
+    config.logger = MyAwesomeLogger
+  end
+```
+
+Contribute
 -------------------
 
 1. Fork it

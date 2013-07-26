@@ -11,7 +11,6 @@ require 'net/sftp'
 $VERBOSE = orig_verbose
 
 # Reference: http://net-ssh.rubyforge.org/sftp/v2/api/
-# TD: Write More Tests!!
 module FunSftp
   class SFTPClient
     attr_accessor :server, :user, :password, :client, :source

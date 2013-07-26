@@ -58,7 +58,7 @@ module FunSftp
     end
 
     def entries(dir, show_dot_files = false) #array of directory entries not caring for '.' files
-      entries_arr = @client.dir.entries(dir).collect(&:name)
+      entries_arr = @client.dir.entries(join_to_pwd(dir)).collect(&:name)
       entries_arr.reject!{|a| a.match(/^\..*$/)} unless show_dot_files
       entries_arr
     end

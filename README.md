@@ -86,6 +86,20 @@ conn.read("path/to/file_name.txt")
 # => Hello World!
 ```
 
+It is also possible to read the attributes size, access time and modified time.
+
+```ruby
+conn.size("path/to/file_name.txt")
+# => 1413455562
+# works also for directories
+
+conn.atime("path/to/file_name.txt")
+# => 2014-10-16 12:32:42 +0200
+
+conn.mtime("path/to/file_name.txt")
+#=> 2014-10-16 12:32:42 +0200
+```
+
 When investigating items on the remote host, these commands can be handy:
 
 ```ruby

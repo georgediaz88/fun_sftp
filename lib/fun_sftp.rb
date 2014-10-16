@@ -57,6 +57,14 @@ module FunSftp
       @client.file.open(join_to_pwd(path)).stat.size
     end
 
+    def atime(path) #returns the atime (access time) of a file. ex: => 2014-10-16 12:32:42 +0200
+      Time.at(@client.file.open(join_to_pwd(path)).stat.atime)
+    end
+
+    def mtime(path) #returns the mtime (modified time) of a file. ex: => 2014-10-16 12:32:42 +0200
+      Time.at(@client.file.open(join_to_pwd(path)).stat.mtime)
+    end
+
     def glob(path, pattern) # ex: ('some_directory', '**/*.rb')
       @client.dir.glob(join_to_pwd(path), pattern).collect(&:name)
     end

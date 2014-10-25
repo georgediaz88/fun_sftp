@@ -41,6 +41,30 @@ module FunSftp
         @sftp_cli.read(file)
       end
 
+      it 'should get the size from test file' do
+        file = File.expand_path('../../support/test1.txt', __FILE__)
+        sftp_mock.stub_chain(:file, :open).with(anything())
+        sftp_mock.stub_chain(:file, :open,:stat, :size).and_return(File.size(file))
+        @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
+        expect(@sftp_cli.size(file)).to eq(File.size(file))
+      end
+
+      it 'should get the atime from test file' do
+        file = File.expand_path('../../support/test1.txt', __FILE__)
+        sftp_mock.stub_chain(:file, :open).with(anything())
+        sftp_mock.stub_chain(:file, :open,:stat, :atime).and_return(File.atime(file))
+        @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
+        expect(@sftp_cli.atime(file)).to eq(File.atime(file))
+      end
+
+      it 'should get the mtime from test file' do
+        file = File.expand_path('../../support/test1.txt', __FILE__)
+        sftp_mock.stub_chain(:file, :open).with(anything())
+        sftp_mock.stub_chain(:file, :open,:stat, :mtime).and_return(File.mtime(file))
+        @sftp_cli = SFTPClient.new('localhost', 'user1', 'pass')
+        expect(@sftp_cli.mtime(file)).to eq(File.mtime(file))
+      end
+
       it 'should return false for directory not found' do
         sftp_response = Object.new
         def sftp_response.code; code = 2 end

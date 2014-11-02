@@ -50,7 +50,7 @@ If you need to start from scratch then reset to the base path:
 
 ```ruby
 conn.reset_path!
-# => "Path Reset and set to => ."
+# => "Path Reset!"
 ```
 
 Now, you can upload your file:

@@ -24,6 +24,8 @@ Setup the connection and specify a `source` directory if desired:
 ```ruby
 include FunSftp
 conn = SFTPClient.new(server, username, password)
+# For authentication via keys
+conn = SFTPClient.new(server, username, password, keys: [/path/to/key], host_key: 'ssh-rsa')
 conn.source = 'projects/awesome_project' #optional
 ```
 

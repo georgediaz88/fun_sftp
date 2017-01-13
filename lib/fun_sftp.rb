@@ -43,12 +43,12 @@ module FunSftp
       client.upload!(src, converted_target, opts)
     end
 
-    def download!(target, src) #fetch locally from remote
+    def download!(remote, local) #fetch from remote to local
       opts = { progress: DownloadCallbacks.new, recursive: true}
-      converted_target = clean_path(target)
+      converted_remote_path = clean_path(remote)
       opts.delete(:progress) unless FunSftp.loggable?
-      opts.delete(:recursive) unless has_directory?(target)
-      client.download!(converted_target, src, opts)
+      opts.delete(:recursive) unless has_directory?(remote)
+      client.download!(converted_remote_path, local, opts)
     end
 
     def read(path) #read a file

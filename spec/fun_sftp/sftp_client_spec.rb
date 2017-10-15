@@ -41,6 +41,28 @@ module FunSftp
         end
       end
 
+      describe '#download!' do
+        before do
+          allow(sftp_mock).to receive(:download!)
+        end
+
+        it 'respects passed in options' do
+          expect(sftp_mock).to receive(:download!).with('remote_file', 'local_file', hash_not_including(:recursive))
+          sftp_cli.download!('remote_file', 'local_file', recursive: false)
+        end
+      end
+
+      describe '#upload!' do
+        before do
+          allow(sftp_mock).to receive(:upload!)
+        end
+
+        it 'respects passed in options' do
+          expect(sftp_mock).to receive(:upload!).with('src', 'target', hash_not_including(:recursive))
+          sftp_cli.upload!('src', 'target', recursive: false)
+        end
+      end
+
       describe '#read' do
         it 'should read both lines from test file' do
           expect(sftp_cli).to receive(:puts).twice

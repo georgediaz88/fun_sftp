@@ -34,20 +34,20 @@ module FunSftp
       end
     end
 
-    def upload!(src, target) #send to remote
+    def upload!(src, target, opts={}) #send to remote
       #target example: 'some_directory/some_name.txt'
-      opts = { progress: UploadCallbacks.new, recursive: true }
+      opts = { progress: UploadCallbacks.new, recursive: true }.merge(opts)
       converted_target = clean_path(target)
       opts.delete(:progress) unless FunSftp.loggable?
-      opts.delete(:recursive) unless has_directory?(target)
+      opts.delete(:recursive) unless opts[:recursive] && has_directory?(target)
       client.upload!(src, converted_target, opts)
     end
 
-    def download!(remote, local) #fetch from remote to local
-      opts = { progress: DownloadCallbacks.new, recursive: true}
+    def download!(remote, local, opts={}) #fetch from remote to local
+      opts = { progress: DownloadCallbacks.new, recursive: true }.merge(opts)
       converted_remote_path = clean_path(remote)
       opts.delete(:progress) unless FunSftp.loggable?
-      opts.delete(:recursive) unless has_directory?(remote)
+      opts.delete(:recursive) unless opts[:recursive] && has_directory?(remote)
       client.download!(converted_remote_path, local, opts)
     end
 

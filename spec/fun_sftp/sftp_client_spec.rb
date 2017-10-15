@@ -41,7 +41,7 @@ module FunSftp
         end
       end
 
-      describe '#download' do
+      describe '#download!' do
         before do
           allow(sftp_mock).to receive(:download!)
         end
@@ -52,7 +52,7 @@ module FunSftp
         end
       end
 
-      describe '#upload' do
+      describe '#upload!' do
         before do
           allow(sftp_mock).to receive(:upload!)
         end

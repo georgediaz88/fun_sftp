@@ -8,6 +8,7 @@ require 'fun_sftp/download_callbacks'
 orig_verbose = $VERBOSE
 $VERBOSE = nil
 require 'net/sftp'
+require 'pathname'
 $VERBOSE = orig_verbose
 
 # Reference: http://net-ssh.rubyforge.org/sftp/v2/api/
